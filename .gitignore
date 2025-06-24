@@ -1,0 +1,35 @@
+# ---- General ----
+*.log
+*.tmp
+*.bak
+*.swp
+
+# ---- VS Code ----
+.vscode/
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ---- Windows ----
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---- Build Artifacts ----
+build/
+build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# ---- Raylib Cache (if any) ----
+.cache/
+
+
+/.idea
+/cmake-build-debug
+/cmake-build-release
