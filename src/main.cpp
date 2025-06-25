@@ -5,10 +5,6 @@
 #include "ranking.h"
 #include "localpvp.h"
 #include "interface.h"
-#include <iostream>
-#include <uuid_hasher.h>
-#include "user.h"
-#include "socket_manager.h"
 
 int main(void) {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Raylib Tetris");
@@ -16,19 +12,6 @@ int main(void) {
     InitAudioDevice();
     // Don't close the window when the exit key is pressed
     SetExitKey(0);
-
-    SocketManager::initialize("http://server.minikupa.com:3000");
-
-    User user;
-    user.load_user();
-
-    if (user.get_uuid().empty()) {
-        std::string uuid = UUIDHasher::generate_uuid();
-        user.set_uuid(uuid);
-        user.store_user();
-    } else {
-        UUIDHasher::set_uuid(user.get_uuid());
-    }
 
     Mode* mode = new Pages::StartPage;
     while (WindowShouldClose() == false) {    // Keep opening the window until the 'esc' key is pressed or the window is manually closed
@@ -56,9 +39,11 @@ int main(void) {
                 mode = new Pages::Sprint;
             }
             else if (nextMode == 6) {
+                // Draw the ranking page
                 mode = new Pages::Ranking;
             }
             else if (nextMode == 7) {
+                // Start a local PvP game
                 mode = new Pages::LocalPvP;
             }
         }
@@ -70,5 +55,4 @@ int main(void) {
     delete mode;
     CloseAudioDevice();
     CloseWindow();
-    SocketManager::close();
 }

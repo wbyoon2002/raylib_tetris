@@ -13,19 +13,10 @@ Pages::Marathon::Marathon(int initLevel)
     lastLevelUpTime = GetTime();
     UpdateDropPeriod();
     actionMultipliers = {100, 300, 500, 800, 400, 800, 1200, 1600, 100, 200, 400};
-    user.load_user();
 }
 
 Pages::Marathon::~Marathon() {
     UnloadMusicStream(music);
-}
-
-MarathonDifficulty difficulty_from_initlevel(int initlevel) {
-    if (initlevel == 1) return MarathonDifficulty::EASY;
-    else if (initlevel == 5) return MarathonDifficulty::MEDIUM;
-    else if (initlevel == 10) return MarathonDifficulty::HARD;
-    else if (initlevel == 15) return MarathonDifficulty::EXTREME;
-    else return MarathonDifficulty::EASY;
 }
 
 void Pages::Marathon::Draw() {
@@ -35,8 +26,7 @@ void Pages::Marathon::Draw() {
     DrawTextEx(font, "High Score", {offsetX + 500, offsetY + 620 - fontSize * 2 - 15}, fontSize, 2, WHITE);
     char highscoreText[10];
 
-    MarathonDifficulty difficulty = difficulty_from_initlevel(initLevel);
-    int high_score = std::max(user.get_high_score(GameType::MARATHON, difficulty), score);
+    int high_score = 10000;
     sprintf(highscoreText, "%d", high_score);
     DrawTextEx(font, highscoreText, {offsetX + 500, offsetY + 620 - fontSize - 10}, fontSize, 2, WHITE);
 
@@ -74,11 +64,6 @@ void Pages::Marathon::Draw() {
 
     // Display "GAME OVER" under the "Next" box
     if (gameOver) {
-        MarathonDifficulty difficulty = difficulty_from_initlevel(initLevel);
-        bool is_high = user.set_high_score(GameType::MARATHON, difficulty, score);
-        if (is_high) {
-            user.store_user();
-        }
         DrawTextEx(font, "GAME OVER", {offsetX + 500, offsetY + 340}, fontSize, 2, WHITE);
     }
 

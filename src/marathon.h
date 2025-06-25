@@ -1,7 +1,6 @@
 #ifndef MARATHON_H
 #define MARATHON_H
 #include "game.h"
-#include "user.h"
 
 namespace Pages {
     class Marathon : public Game {
@@ -13,7 +12,6 @@ namespace Pages {
     private:
         // 1. basic implementation
         int score;
-        User user;
         void UpdateScore(int points);
         void Reset();
         // 6. score UI/scoring implementation

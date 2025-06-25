@@ -25,16 +25,6 @@ IBlock::IBlock() {
     cells[2] = {Position(2, 0), Position(2, 1), Position(2, 2), Position(2, 3)};
     cells[3] = {Position(0, 1), Position(1, 1), Position(2, 1), Position(3, 1)};
     Move(0, 3);
-    /*
-    clockwiseWallKick[0] = {Position(0, 0), Position(1, 0), Position(-2, 0), Position(1, -2), Position(-2, 1)};
-    clockwiseWallKick[1] = {Position(0, 0), Position(-2, 0), Position(1, 0), Position(-2, -1), Position(1, 2)};
-    clockwiseWallKick[2] = {Position(0, 0), Position(-1, 0), Position(2, 0), Position(-1, 2), Position(2, -1)};
-    clockwiseWallKick[3] = {Position(0, 0), Position(2, 0), Position(-1, 0), Position(2, 1), Position(-1, -2)};
-    counterclockwiseWallKick[0] = {Position(0, 0), Position(2, 0), Position(-1, 0), Position(2, 1), Position(-1, -2)};
-    counterclockwiseWallKick[1] = {Position(0, 0), Position(1, 0), Position(-2, 0), Position(1, -2), Position(-2, 1)};
-    counterclockwiseWallKick[2] = {Position(0, 0), Position(-2, 0), Position(1, 0), Position(-2, -1), Position(1, 2)};
-    counterclockwiseWallKick[3] = {Position(0, 0), Position(-1, 0), Position(2, 0), Position(-1, 2), Position(2, -1)};
-    */
     // different SRS wall kicks for IBlock
     clockwiseWallKick[0] = {Position(0, 0), Position(0, 1), Position(0, -2), Position(2, 1), Position(-1, -2)};
     clockwiseWallKick[1] = {Position(0, 0), Position(0, -2), Position(0, 1), Position(1, -2), Position(-2, 1)};

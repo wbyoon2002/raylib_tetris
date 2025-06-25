@@ -3,16 +3,6 @@
 Block::Block()
     : cellSize(30), rotationState(0), rowOffset(0), columnOffset(0) {
     colors = GetCellColors();
-    /*
-    clockwiseWallKick[0] = {Position(0, 0), Position(-1, 0), Position(-1, -1), Position(0, 2), Position(-1, 2)};
-    clockwiseWallKick[1] = {Position(0, 0), Position(-1, 0), Position(-1, 1), Position(0, -2), Position(-1, -2)};
-    clockwiseWallKick[2] = {Position(0, 0), Position(1, 0), Position(1, -1), Position(0, 2), Position(1, 2)};
-    clockwiseWallKick[3] = {Position(0, 0), Position(1, 0), Position(1, 1), Position(0, -2), Position(1, -2)};
-    counterclockwiseWallKick[0] = {Position(0, 0), Position(1, 0), Position(1, -1), Position(0, 2), Position(1, 2)};
-    counterclockwiseWallKick[1] = {Position(0, 0), Position(-1, 0), Position(-1, 1), Position(0, -2), Position(-1, -2)};
-    counterclockwiseWallKick[2] = {Position(0, 0), Position(-1, 0), Position(-1, -1), Position(0, 2), Position(-1, 2)};
-    counterclockwiseWallKick[3] = {Position(0, 0), Position(1, 0), Position(1, 1), Position(0, -2), Position(1, -2)};
-    */
     clockwiseWallKick[0] = {Position(0, 0), Position(0, -1), Position(1, -1), Position(-2, 0), Position(-2, -1)};
     clockwiseWallKick[1] = {Position(0, 0), Position(0, -1), Position(-1, -1), Position(2, 0), Position(2, -1)};
     clockwiseWallKick[2] = {Position(0, 0), Position(0, 1), Position(1, 1), Position(-2, 0), Position(-2, 1)};

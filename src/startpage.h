@@ -2,7 +2,6 @@
 #define STARTPAGE_H
 #include "mode.h"
 #include <string>
-#include <user.h>
 #include <vector>
 
 namespace Pages {
@@ -10,32 +9,22 @@ namespace Pages {
     public:
         StartPage();
         ~StartPage();
-        virtual void Draw();
-        virtual void HandleInput();
+        void Draw() override;
+        void HandleInput() override;
     private:
         int selectedOption;
         std::string title;
-        std::string input_nickname;
-        User user;
         std::vector<std::string> menuOptions;
 
         bool isMarathon;
         Texture2D logoTexture{};
 
         void ResetToMainMenu();
-        void DrawPopup(const std::vector<std::string>& options, const std::string& title);
         void DrawHeader();
-        void DrawNicknameInput();
         void DrawMenu();
-        void DrawPopups();
 
-        void HandleNicknameInput();
-        void HandlePopupInput();
         void HandleMenuInput();
 
-        bool showModePopup;
-        bool showLevelPopup;
-        int popupSelected;
         Vector2 headerEndPos;
     };
 }

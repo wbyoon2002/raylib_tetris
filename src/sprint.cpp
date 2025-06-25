@@ -45,7 +45,6 @@ Pages::Sprint::Sprint(int totalLines): totalLines(totalLines), isFinished(false)
     std::string soundPath = assetsBasePath + "/Sounds/victory.mp3";
     victorySound = LoadSound(soundPath.c_str());
     startTime = GetTime();
-    user.load_user();
 }
 
 Pages::Sprint::~Sprint() {
@@ -64,7 +63,7 @@ void Pages::Sprint::Draw() {
     std::string formattedTime = formatDuration(elapsedTime);
 
     // Display best time
-    double best_time = user.get_best_time();
+    double best_time = 180.0;
     std::string formattedBestTime = formatDuration(best_time);
     DrawTextEx(font, "Best", {offsetX + 500, offsetY + 620 - fontSize * 2 - 15}, fontSize, 2, WHITE);
     
@@ -78,10 +77,6 @@ void Pages::Sprint::Draw() {
     // Display "GAME OVER" under the "Next" box
     if (gameOver) {
         if (isFinished) {
-            bool is_best = user.set_best_time(elapsedTime);
-            if (is_best) {
-                user.store_user();
-            }
             DrawTextEx(font, "FINISHED!", {offsetX + 500, offsetY + 340}, fontSize, 2, WHITE);
         }
         else {
