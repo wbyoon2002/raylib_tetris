@@ -13,7 +13,6 @@ namespace Pages {
         Player** players;
         void DrawPopup(const std::string&);
         int winnerIndex;
-        bool hasPaused;
     };
 }
 

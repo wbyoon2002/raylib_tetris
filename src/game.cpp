@@ -8,7 +8,7 @@ Game::Game(float x, float y, int keyboard)
     : gameOver(false), isHoldEmpty(true), hasSwappedBlock(false), fontSize(38), totalRowsCleared(0), lockDelayResetCount(0), tSpinType(0), lockBlockTrigger(false),
         combo(-1), actionType(-1), hasTouchedGround(false), isCombo(false), isBacktoBack(false), dropPeriod(1.0), rowsCleared(0), keyBoardLayout(keyboard),
         previousDifficult(false), currentDifficult(false), isLastManeuverRotation(false), isDifficultWallKick(false), actionTrigger(false), offsetX(x), offsetY(y),
-        rng(rd()), hasPaused(false) {
+        rng(rd()) {
     std::string assetsBasePath = ASSETS_PATH;
     lastDropTime = GetTime();
     lastActionTime = GetTime();

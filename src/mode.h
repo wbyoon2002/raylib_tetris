@@ -13,6 +13,9 @@ public:
     // the next mode the player will move to
     int nextMode;
 protected:
+    void DrawPausedScreen();
+    bool hasPaused;
+    int pauseMenuSelection;
     Music music;
     Font font;
 };

@@ -101,7 +101,7 @@ protected:
         TSS,
         TSD,
         TST,
-        MTNOLINES,
+        MTSNOLINES,
         MTSS,
         MTSD
     };
@@ -149,8 +149,6 @@ protected:
     int softDropDistance;
     // true when a block moves down due to gravity
     bool softDropTrigger;
-    // true when the game is paused
-    bool hasPaused;
     // variables related to pausing/resuming the game
     double pauseInterval;
     double lastPauseTime;

@@ -1,6 +1,6 @@
 #include "localpvp.h"
 
-Pages::LocalPvP::LocalPvP(): hasPaused(false) {
+Pages::LocalPvP::LocalPvP() {
     std::string assetsBasePath = ASSETS_PATH;
     std::string musicPath = assetsBasePath + "/Sounds/music.mp3";
     music = LoadMusicStream(musicPath.c_str());
@@ -8,6 +8,7 @@ Pages::LocalPvP::LocalPvP(): hasPaused(false) {
     players = new Player*[2];
     players[0] = new Player(0, 90, 1, "Player 1");
     players[1] = new Player(710, 90, 2, "Player 2");
+    pauseMenuSelection = 0;
 }
 
 Pages::LocalPvP::~LocalPvP() {
@@ -31,11 +32,25 @@ void Pages::LocalPvP::HandleInput() {
         hasPaused = true;
     }
     else if (hasPaused) {
-        if (Game::keyPressed == KEY_ENTER) {
-            for (int i = 0; i < 2; i++) {
-                players[i]->Resume();
+        if (Game::keyPressed == KEY_UP) {
+            pauseMenuSelection = (pauseMenuSelection - 1 + 2) % 2;
+        }
+        else if (Game::keyPressed == KEY_DOWN) {
+            pauseMenuSelection = (pauseMenuSelection + 1) % 2;
+        }
+        else if (Game::keyPressed == KEY_ENTER) {
+            if (pauseMenuSelection == 0) {
+                // Resume game
+                for (int i = 0; i < 2; i++) {
+                    players[i]->Resume();
+                }
+                hasPaused = false;
             }
-            hasPaused = false;
+            else if (pauseMenuSelection == 1) {
+                // Exit game
+                exitMode = true;
+                return;
+            }
         }
         else if (Game::keyPressed == KEY_ESCAPE) {
             exitMode = true;
@@ -68,6 +83,9 @@ void Pages::LocalPvP::Draw() {
     if (players[0]->HasLost() || players[1]->HasLost()) {
         std::string title = players[winnerIndex]->getName() + " has won the game!";
         DrawPopup(title);
+    }
+    if (hasPaused) {
+        DrawPausedScreen();
     }
 }
 
