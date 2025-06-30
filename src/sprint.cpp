@@ -54,7 +54,7 @@ Pages::Sprint::~Sprint() {
 void Pages::Sprint::Draw() {
     UpdateMusicStream(music);
     Game::Draw();
-    double elapsedTime = GetTime() - startTime;
+    double elapsedTime = (hasPaused ? lastPauseTime : GetTime()) - startTime;
     if (gameOver) {
         elapsedTime = finalTime;
     }
@@ -104,6 +104,23 @@ void Pages::Sprint::HandleInput() {
         else if (keyPressed == KEY_ENTER) {
             Game::Reset();
             PlayMusicStream(music);
+        }
+    }
+    else if (!(gameOver || hasPaused) && keyPressed == KEY_ESCAPE) {
+        Pause();
+        PauseMusicStream(music);
+    }
+    else if (hasPaused && keyPressed != 0) {
+        // exit the game when the esc key is pressed
+        if (keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
+        }
+        // reset the game when the enter key is pressed
+        else if (keyPressed == KEY_ENTER) {
+            Resume();
+            startTime += pauseInterval;
+            ResumeMusicStream(music);
         }
     }
     if (gameOverTrigger) {

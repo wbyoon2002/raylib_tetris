@@ -1,6 +1,6 @@
 #include "localpvp.h"
 
-Pages::LocalPvP::LocalPvP() {
+Pages::LocalPvP::LocalPvP(): hasPaused(false) {
     std::string assetsBasePath = ASSETS_PATH;
     std::string musicPath = assetsBasePath + "/Sounds/music.mp3";
     music = LoadMusicStream(musicPath.c_str());
@@ -24,8 +24,23 @@ void Pages::LocalPvP::HandleInput() {
         players[i]->HandleInput();
         players[i]->HandleAttack(*players[1 - i]);
     }
-    if (Game::keyPressed == KEY_ESCAPE) {
-        exitMode = true;
+    if (!hasPaused && Game::keyPressed == KEY_ESCAPE) {
+        for (int i = 0; i < 2; i++) {
+            players[i]->Pause();
+        }
+        hasPaused = true;
+    }
+    else if (hasPaused) {
+        if (Game::keyPressed == KEY_ENTER) {
+            for (int i = 0; i < 2; i++) {
+                players[i]->Resume();
+            }
+            hasPaused = false;
+        }
+        else if (Game::keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
+        }
     }
     if (players[0]->HasLost() && !players[1]->HasLost()) {
         StopMusicStream(music);

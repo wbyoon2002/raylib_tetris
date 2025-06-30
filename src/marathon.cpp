@@ -96,13 +96,29 @@ void Pages::Marathon::HandleInput() {
             PlayMusicStream(music);
         }
     }
-    if (!gameOver) {
+    else if (hasPaused && keyPressed != 0) {
+        // exit the game when the esc key is pressed
+        if (keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
+        }
+        // reset the game when the enter key is pressed
+        else if (keyPressed == KEY_ENTER) {
+            Resume();
+            ResumeMusicStream(music);
+        }
+    }
+    else if (!(gameOver || hasPaused)) {
         if (keyPressed == softDropKey[keyBoardLayout]) {
             // increase the score by 1 if the block can move down (soft drop)
             UpdateScore(hardDropDistance > 0 ? 1 : 0);
         }
         else if (keyPressed == hardDropKey[keyBoardLayout]) {
             UpdateScore(2 * hardDropDistance);
+        }
+        else if (keyPressed == KEY_ESCAPE) {
+            Pause();
+            PauseMusicStream(music);
         }
         if (softDropTrigger) {
             UpdateScore(softDropDistance);

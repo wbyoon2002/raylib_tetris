@@ -14,6 +14,8 @@ public:
     virtual void HandleInput();
     static void ReadInput();
     static int keyPressed;
+    virtual void Pause();
+    virtual void Resume();
 protected:
     // 1. basic implementation
     // get a random block from the member variable blocks
@@ -69,6 +71,8 @@ protected:
     void HardDropBlock();
     Block ghostBlock;
     // distance between ghostBlock and currentBlock
+    int distance;
+    // distance value for score update (marathon)
     int hardDropDistance;
     float fontSize;
     // 3. hold/swap implementation
@@ -145,6 +149,11 @@ protected:
     int softDropDistance;
     // true when a block moves down due to gravity
     bool softDropTrigger;
+    // true when the game is paused
+    bool hasPaused;
+    // variables related to pausing/resuming the game
+    double pauseInterval;
+    double lastPauseTime;
 };
 
 #endif

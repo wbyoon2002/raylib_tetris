@@ -96,3 +96,8 @@ void Player::HandleAttack(const Player& other) {
         incomeLines += other.attackLines;
     }
 }
+
+void Player::Resume() {
+    Game::Resume();
+    incomeTime += pauseInterval;
+}
