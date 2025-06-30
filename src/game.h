@@ -141,6 +141,10 @@ protected:
     const int holdKey[3] = {KEY_C, KEY_N, KEY_SLASH};
     // variables for block locking detection
     bool lockBlockTrigger;
+    // variable for implementing gravity at high levels
+    int softDropDistance;
+    // true when a block moves down due to gravity
+    bool softDropTrigger;
 };
 
 #endif

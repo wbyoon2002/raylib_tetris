@@ -124,6 +124,7 @@ void Game::HandleInput() {
     resetTrigger = false;
     gameOverTrigger = false;
     lockBlockTrigger = false;
+    softDropTrigger = false;
     isKeyDown = IsKeyDown(softDropKey[keyBoardLayout]);
     if (!gameOver) {
         if (keyPressed == leftKey[keyBoardLayout]) {
@@ -155,13 +156,16 @@ void Game::HandleInput() {
         double gravityPeriod = isKeyDown ? (0.05 < dropPeriod ? 0.05 : dropPeriod) : dropPeriod;
         // gravity implementation
         if (DropTriggered(gravityPeriod) && hardDropDistance > 0) {
-            int softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
+            softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
             lastDropTime += gravityPeriod * softDropDistance;
             if (softDropDistance > hardDropDistance) {
                 softDropDistance = hardDropDistance;
             }
             for (int i = 0; i < softDropDistance; i++) {
                 MoveBlockDown();
+            }
+            if (isKeyDown && dropPeriod > 0.05 && softDropDistance > 0) {
+                softDropTrigger = true;
             }
         }
         // start the lock delay timer when the currentBlock has touched the ground

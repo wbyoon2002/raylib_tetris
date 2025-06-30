@@ -80,18 +80,6 @@ void Pages::Marathon::Draw() {
 
 void Pages::Marathon::HandleInput() {
     ReadInput();
-    // score update for soft drop
-    double gravityPeriod = isKeyDown ? (0.05 < dropPeriod ? 0.05 : dropPeriod) : dropPeriod;
-    if (DropTriggered(gravityPeriod) && hardDropDistance > 0) {
-        int softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
-        if (softDropDistance > hardDropDistance) {
-            softDropDistance = hardDropDistance;
-        }
-        // increase the score by 1 for each cell for a soft drop
-        if (isKeyDown && dropPeriod > 0.05) {
-            UpdateScore(softDropDistance);
-        }
-    }
     Game::HandleInput();
     if (gameOverTrigger) {
         StopMusicStream(music);
@@ -115,6 +103,9 @@ void Pages::Marathon::HandleInput() {
         }
         else if (keyPressed == hardDropKey[keyBoardLayout]) {
             UpdateScore(2 * hardDropDistance);
+        }
+        if (softDropTrigger) {
+            UpdateScore(softDropDistance);
         }
     }
     if (actionTrigger) {
