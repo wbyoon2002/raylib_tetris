@@ -25,17 +25,37 @@ void Pages::LocalPvP::HandleInput() {
         players[i]->HandleInput();
         players[i]->HandleAttack(*players[1 - i]);
     }
-    if (!hasPaused && Game::keyPressed == KEY_ESCAPE) {
+    if (players[0]->HasLost() && !players[1]->HasLost()) {
+        StopMusicStream(music);
+        players[1]->Stop();
+        winnerIndex = 1;
+    }
+    else if (players[1]->HasLost() && !players[0]->HasLost()) {
+        StopMusicStream(music);
+        players[0]->Stop();
+        winnerIndex = 0;
+    }
+    else if (players[0]->HasLost() && players[1]->HasLost()) {
+        if (Game::keyPressed == KEY_ENTER) {
+            // reset the game when the enter key is pressed
+            PlayMusicStream(music);
+            players[0]->Restart();
+            players[1]->Restart();
+        }
+        else if (Game::keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
+        }
+    }
+    else if (!hasPaused && Game::keyPressed == KEY_ESCAPE) {
         for (int i = 0; i < 2; i++) {
             players[i]->Pause();
         }
         hasPaused = true;
+        PauseMusicStream(music);
     }
     else if (hasPaused) {
-        if (Game::keyPressed == KEY_UP) {
-            pauseMenuSelection = (pauseMenuSelection - 1 + 2) % 2;
-        }
-        else if (Game::keyPressed == KEY_DOWN) {
+        if (Game::keyPressed == KEY_UP || Game::keyPressed == KEY_DOWN) {
             pauseMenuSelection = (pauseMenuSelection + 1) % 2;
         }
         else if (Game::keyPressed == KEY_ENTER) {
@@ -45,6 +65,7 @@ void Pages::LocalPvP::HandleInput() {
                     players[i]->Resume();
                 }
                 hasPaused = false;
+                ResumeMusicStream(music);
             }
             else if (pauseMenuSelection == 1) {
                 // Exit game
@@ -56,22 +77,6 @@ void Pages::LocalPvP::HandleInput() {
             exitMode = true;
             return;
         }
-    }
-    if (players[0]->HasLost() && !players[1]->HasLost()) {
-        StopMusicStream(music);
-        players[1]->Stop();
-        winnerIndex = 1;
-    }
-    if (players[1]->HasLost() && !players[0]->HasLost()) {
-        StopMusicStream(music);
-        players[0]->Stop();
-        winnerIndex = 0;
-    }
-    if (players[0]->HasLost() && players[1]->HasLost() && Game::keyPressed == KEY_ENTER) {
-        // reset the game when the enter key is pressed
-        PlayMusicStream(music);
-        players[0]->Restart();
-        players[1]->Restart();
     }
 }
 
