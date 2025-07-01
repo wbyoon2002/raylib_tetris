@@ -76,22 +76,13 @@ void Pages::Marathon::Draw() {
     DrawTextEx(font, lineText, {
                    offsetX + 180 - MeasureTextEx(font, lineText, fontSize, 2).x, offsetY + 620 - fontSize - 10
                }, fontSize, 2, WHITE);
+    if (hasPaused) {
+        DrawPausedScreen();
+    }
 }
 
 void Pages::Marathon::HandleInput() {
     ReadInput();
-    // score update for soft drop
-    double gravityPeriod = isKeyDown ? (0.05 < dropPeriod ? 0.05 : dropPeriod) : dropPeriod;
-    if (DropTriggered(gravityPeriod) && hardDropDistance > 0) {
-        int softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
-        if (softDropDistance > hardDropDistance) {
-            softDropDistance = hardDropDistance;
-        }
-        // increase the score by 1 for each cell for a soft drop
-        if (isKeyDown && dropPeriod > 0.05) {
-            UpdateScore(softDropDistance);
-        }
-    }
     Game::HandleInput();
     if (gameOverTrigger) {
         StopMusicStream(music);
@@ -108,13 +99,44 @@ void Pages::Marathon::HandleInput() {
             PlayMusicStream(music);
         }
     }
-    if (!gameOver) {
+    else if (hasPaused && keyPressed != 0) {
+        if (Game::keyPressed == KEY_UP) {
+            pauseMenuSelection = (pauseMenuSelection - 1 + 2) % 2;
+        }
+        else if (Game::keyPressed == KEY_DOWN) {
+            pauseMenuSelection = (pauseMenuSelection + 1) % 2;
+        }
+        else if (Game::keyPressed == KEY_ENTER) {
+            if (pauseMenuSelection == 0) {
+                Resume();
+                ResumeMusicStream(music);
+            }
+            else if (pauseMenuSelection == 1) {
+                // Exit game
+                exitMode = true;
+                return;
+            }
+        }
+        // exit the game when the esc key is pressed
+        if (keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
+        }
+    }
+    else if (!(gameOver || hasPaused)) {
         if (keyPressed == softDropKey[keyBoardLayout]) {
             // increase the score by 1 if the block can move down (soft drop)
             UpdateScore(hardDropDistance > 0 ? 1 : 0);
         }
         else if (keyPressed == hardDropKey[keyBoardLayout]) {
             UpdateScore(2 * hardDropDistance);
+        }
+        else if (keyPressed == KEY_ESCAPE) {
+            Pause();
+            PauseMusicStream(music);
+        }
+        if (softDropTrigger) {
+            UpdateScore(softDropDistance);
         }
     }
     if (actionTrigger) {

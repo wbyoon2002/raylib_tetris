@@ -54,7 +54,7 @@ Pages::Sprint::~Sprint() {
 void Pages::Sprint::Draw() {
     UpdateMusicStream(music);
     Game::Draw();
-    double elapsedTime = GetTime() - startTime;
+    double elapsedTime = (hasPaused ? lastPauseTime : GetTime()) - startTime;
     if (gameOver) {
         elapsedTime = finalTime;
     }
@@ -89,6 +89,9 @@ void Pages::Sprint::Draw() {
     char lineText[20];
     sprintf(lineText, "%d/%d", totalRowsCleared, totalLines);
     DrawTextEx(font, lineText, {offsetX + 180 - MeasureTextEx(font, lineText, fontSize, 2).x, offsetY + 620 - fontSize - 10}, fontSize, 2, WHITE);
+    if (hasPaused) {
+        DrawPausedScreen();
+    }
 }
 
 void Pages::Sprint::HandleInput() {
@@ -104,6 +107,36 @@ void Pages::Sprint::HandleInput() {
         else if (keyPressed == KEY_ENTER) {
             Game::Reset();
             PlayMusicStream(music);
+        }
+    }
+    else if (!(gameOver || hasPaused) && keyPressed == KEY_ESCAPE) {
+        Pause();
+        PauseMusicStream(music);
+    }
+    else if (hasPaused && keyPressed != 0) {
+        if (Game::keyPressed == KEY_UP) {
+            pauseMenuSelection = (pauseMenuSelection - 1 + 2) % 2;
+        }
+        else if (Game::keyPressed == KEY_DOWN) {
+            pauseMenuSelection = (pauseMenuSelection + 1) % 2;
+        }
+        else if (Game::keyPressed == KEY_ENTER) {
+            if (pauseMenuSelection == 0) {
+                // Resume game
+                Resume();
+                startTime += pauseInterval;
+                ResumeMusicStream(music);
+            }
+            else if (pauseMenuSelection == 1) {
+                // Exit game
+                exitMode = true;
+                return;
+            }
+        }
+        // exit the game when the esc key is pressed
+        if (keyPressed == KEY_ESCAPE) {
+            exitMode = true;
+            return;
         }
     }
     if (gameOverTrigger) {

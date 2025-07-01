@@ -100,7 +100,7 @@ void Game::Draw() {
         }
     }
     currentBlock.Draw(offsetX + 190 + 1, offsetY + 11);
-    if (hardDropDistance > 0) {
+    if (distance > 0) {
         ghostBlock.DrawEdge(offsetX + 190 + 1, offsetY + 11);
     }
     for (int i = 0; i < 3; i++) {
@@ -124,8 +124,9 @@ void Game::HandleInput() {
     resetTrigger = false;
     gameOverTrigger = false;
     lockBlockTrigger = false;
+    softDropTrigger = false;
     isKeyDown = IsKeyDown(softDropKey[keyBoardLayout]);
-    if (!gameOver) {
+    if (!(gameOver || hasPaused)) {
         if (keyPressed == leftKey[keyBoardLayout]) {
             MoveBlockLeft();
         }
@@ -149,28 +150,28 @@ void Game::HandleInput() {
         else if (keyPressed == holdKey[keyBoardLayout]) {
             SwapBlock();
         }
-        else if (keyPressed == KEY_ESCAPE) {
-            exitMode = true;
-        }
         double gravityPeriod = isKeyDown ? (0.05 < dropPeriod ? 0.05 : dropPeriod) : dropPeriod;
         // gravity implementation
-        if (DropTriggered(gravityPeriod) && hardDropDistance > 0) {
-            int softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
+        if (DropTriggered(gravityPeriod) && distance > 0) {
+            softDropDistance = (GetTime() - lastDropTime) / gravityPeriod;
             lastDropTime += gravityPeriod * softDropDistance;
-            if (softDropDistance > hardDropDistance) {
-                softDropDistance = hardDropDistance;
+            if (softDropDistance > distance) {
+                softDropDistance = distance;
             }
             for (int i = 0; i < softDropDistance; i++) {
                 MoveBlockDown();
             }
+            if (isKeyDown && dropPeriod > 0.05 && softDropDistance > 0) {
+                softDropTrigger = true;
+            }
         }
         // start the lock delay timer when the currentBlock has touched the ground
-        if (hardDropDistance == 0 && hasTouchedGround == false) {
+        if (distance == 0 && hasTouchedGround == false) {
             hasTouchedGround = true;
             lastLockDelayTime = GetTime();
         }
         // call LockBlock() 0.5s after the lock delay timer was triggered
-        if ((LockDelayTriggered() || lockDelayResetCount == 15) && hasTouchedGround && hardDropDistance == 0) {
+        if ((LockDelayTriggered() || lockDelayResetCount == 15) && hasTouchedGround && distance == 0) {
             LockBlock();
         }
     }
@@ -219,7 +220,7 @@ void Game::MoveBlockRight() {
 
 void Game::MoveBlockDown() {
     if (!gameOver) {
-        if (hardDropDistance > 0) {
+        if (distance > 0) {
             currentBlock.Move(1, 0);
             isLastManeuverRotation = false;
             if (lockDelayResetCount < 15 && hasTouchedGround) {
@@ -406,20 +407,21 @@ void Game::Reset() {
 
 void Game::PlaceGhostBlock() {
     ghostBlock = currentBlock;
-    hardDropDistance = 0;
+    distance = 0;
     while (IsBlockOutside(true) == false && BlockFits(true)) {
-        hardDropDistance++;
+        distance++;
         ghostBlock.Move(1, 0);
     }
-    hardDropDistance--;
+    distance--;
     ghostBlock.Move(-1, 0);
 }
 
 void Game::HardDropBlock() {
     PlaySound(hardDropSound);
+    hardDropDistance = distance;
     isLastManeuverRotation = false;
     currentBlock = ghostBlock;
-    hardDropDistance = 0;
+    distance = 0;
     LockBlock();
 }
 
@@ -476,6 +478,18 @@ bool Game::LockDelayTriggered() {
         return true;
     }
     return false;
+}
+
+void Game::Pause() {
+    hasPaused = true;
+    lastPauseTime = GetTime();
+}
+
+void Game::Resume() {
+    hasPaused = false;
+    pauseInterval = GetTime() - lastPauseTime;
+    lastDropTime += pauseInterval;
+    lastLockDelayTime += pauseInterval;
 }
 
 void Game::DrawTextBox(const char *text, int x, int y, int width, int height) {

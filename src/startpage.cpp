@@ -49,14 +49,6 @@ void Pages::StartPage::DrawMenu() {
         Vector2 textPos = {menuStartPos.x - textSize.x / 2, menuStartPos.y + i * menuSpacing};
         Color textColor = (i == selectedOption) ? YELLOW : WHITE;
         DrawTextEx(font, menuOptions[i].c_str(), textPos, menuFontSize, 2, textColor);
-
-        // Draw triangle next to selected option
-        if (i == selectedOption) {
-            Vector2 p1 = {textPos.x - 40, textPos.y + textSize.y / 2}; // Triangle point
-            Vector2 p2 = {p1.x - 15, p1.y - 10}; // Top vertex
-            Vector2 p3 = {p1.x - 15, p1.y + 10};
-            DrawTriangle(p1, p2, p3, WHITE); // Bottom vertex
-        }
     }
 }
 

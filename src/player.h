@@ -12,6 +12,7 @@ public:
     void Restart();
     std::string getName();
     void HandleAttack(const Player&);
+    void Resume() override;
 private:
     std::string name;
     // trigger for sending an attack
