@@ -70,6 +70,7 @@ void Pages::LocalPvP::HandleInput() {
             else if (pauseMenuSelection == 1) {
                 hasPaused = false;
                 pauseMenuSelection = 0;
+                StopMusicStream(music);
                 Reset();
             }
              else if (pauseMenuSelection == 2) {
