@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player(float x, float y, int layout, std::string name)
-: Game(x, y, layout), name(name), attackTrigger(false), incomeTrigger(false), incomeLines(0) {
+: Game(x, y, layout), name(name), attackTrigger(false), incomeTrigger(false), incomeLines(0), delayLength(1.5) {
     garbageLines = {0, 1, 2, 4, 0, 2, 4, 6, 0, 0, 1};
 }
 
@@ -10,8 +10,8 @@ void Player::Draw() {
     Game::Draw();
     double currentTime = GetTime();
     if (incomeTrigger) {
-        if (currentTime - incomeTime < 0.5) {
-            float rectHeight = 150.0 * (1.0 - (currentTime - incomeTime) * 2);
+        if (currentTime - incomeTime < delayLength) {
+            float rectHeight = 150.0 * (1.0 - (currentTime - incomeTime) / delayLength);
             Rectangle countdownRect = {offsetX + 175, offsetY + 611 - rectHeight, 10, rectHeight};
             DrawRectangleRec(countdownRect, RED);
         }
@@ -39,7 +39,7 @@ void Player::HandleInput() {
                 attackLines += 3;
             }
         }
-        if (incomeTrigger && (currentTime - incomeTime < 0.5)) {
+        if (incomeTrigger && (currentTime - incomeTime < delayLength)) {
             // initiate counterattack/elimination of incoming garbage lines
             attackLines -= incomeLines;
         }
@@ -55,7 +55,7 @@ void Player::HandleInput() {
             incomeLines = -attackLines;
         }
     }
-    if (incomeTrigger && (currentTime - incomeTime > 0.5) && lockBlockTrigger) {
+    if (incomeTrigger && (currentTime - incomeTime > delayLength) && lockBlockTrigger) {
         if (grid->CreateGarbageRows(incomeLines)) {
             Game::PlaceGhostBlock();
             incomeTrigger = false;

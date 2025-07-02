@@ -26,6 +26,8 @@ private:
     // number of garbage lines received
     int incomeLines;
     std::vector<int> garbageLines;
+    // variable for garbage delay
+    float delayLength;
 };
 
 #endif
