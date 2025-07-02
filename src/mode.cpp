@@ -13,7 +13,7 @@ void Mode::DrawPausedScreen() {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
 
     // Menu options
-    std::vector<std::string> menuOptions = {"Resume", "Exit to Menu"};
+    std::vector<std::string> menuOptions = {"Resume", "Restart", "Exit to Menu"};
     
     // Calculate menu dimensions
     int menuFontSize = 28;

@@ -121,7 +121,6 @@ void Game::Draw() {
 
 void Game::HandleInput() {
     actionTrigger = false;
-    resetTrigger = false;
     gameOverTrigger = false;
     lockBlockTrigger = false;
     softDropTrigger = false;
@@ -380,7 +379,6 @@ bool Game::BlockFits(bool isGhostBlock) {
 
 void Game::Reset() {
     gameOver = false;
-    resetTrigger = true;
     // reset the grid
     grid->Initialize();
     // reset currentBlock, ghostBlock, holdBlock, and nextBlock

@@ -61,8 +61,6 @@ protected:
     Sound rotateSound;
     // true when an action is made after HandleInput()
     bool actionTrigger;
-    // true when the game has been reset
-    bool resetTrigger;
     // true when the game is finished
     bool gameOverTrigger;
     // 2. ghost block/hard drop implementation

@@ -95,16 +95,15 @@ void Pages::Marathon::HandleInput() {
         }
         // reset the game when the enter key is pressed
         else if (keyPressed == KEY_ENTER) {
-            Game::Reset();
-            PlayMusicStream(music);
+            Reset();
         }
     }
     else if (hasPaused && keyPressed != 0) {
         if (Game::keyPressed == KEY_UP) {
-            pauseMenuSelection = (pauseMenuSelection - 1 + 2) % 2;
+            pauseMenuSelection = (pauseMenuSelection - 1 + 3) % 3;
         }
         else if (Game::keyPressed == KEY_DOWN) {
-            pauseMenuSelection = (pauseMenuSelection + 1) % 2;
+            pauseMenuSelection = (pauseMenuSelection + 1) % 3;
         }
         else if (Game::keyPressed == KEY_ENTER) {
             if (pauseMenuSelection == 0) {
@@ -112,6 +111,11 @@ void Pages::Marathon::HandleInput() {
                 ResumeMusicStream(music);
             }
             else if (pauseMenuSelection == 1) {
+                hasPaused = false;
+                pauseMenuSelection = 0;
+                Reset();
+            }
+            else if (pauseMenuSelection == 2) {
                 // Exit game
                 exitMode = true;
                 return;
@@ -142,9 +146,6 @@ void Pages::Marathon::HandleInput() {
     if (actionTrigger) {
         UpdateBonusPoints();
     }
-    if (resetTrigger) {
-        Reset();
-    }
 }
 
 void Pages::Marathon::UpdateScore(int points) {
@@ -152,9 +153,11 @@ void Pages::Marathon::UpdateScore(int points) {
 }
 
 void Pages::Marathon::Reset() {
+    Game::Reset();
     score = 0;
     level = initLevel;
     UpdateDropPeriod();
+    PlayMusicStream(music);
 }
 
 void Pages::Marathon::UpdateBonusPoints() {
