@@ -10,14 +10,16 @@ void Player::Draw() {
     Game::Draw();
     double currentTime = GetTime();
     if (incomeTrigger) {
+        float rectHeight = 30.0 * incomeLines;
+        Rectangle countdownRect = {offsetX + 175, offsetY + 611 - rectHeight, 10, rectHeight};
         if (currentTime - incomeTime < delayLength) {
-            float rectHeight = 150.0 * (1.0 - (currentTime - incomeTime) / delayLength);
-            Rectangle countdownRect = {offsetX + 175, offsetY + 611 - rectHeight, 10, rectHeight};
-            DrawRectangleRec(countdownRect, RED);
+            DrawRectangleRec(countdownRect, ORANGE);
+            float rectWidth = 300.0 * (1.0 - (currentTime - incomeTime) / delayLength);
+            Rectangle warningRect = {offsetX + 340 - rectWidth / 2, offsetY + 615, rectWidth, 10};
+            DrawRectangleRec(warningRect, RED);
         }
         else {
-            std::string warning = std::to_string(incomeLines) + " garbage lines incoming";
-            DrawTextEx(font, warning.c_str(), {offsetX + 355 - MeasureTextEx(font, warning.c_str(), fontSize, 2).x / 2, 90 - fontSize * 2 - 5}, fontSize, 2, RED);
+            DrawRectangleRec(countdownRect, RED);
         }
     }
 }
