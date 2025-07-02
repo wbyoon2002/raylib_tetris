@@ -379,6 +379,7 @@ bool Game::BlockFits(bool isGhostBlock) {
 
 void Game::Reset() {
     gameOver = false;
+    hasPaused = false;
     // reset the grid
     grid->Initialize();
     // reset currentBlock, ghostBlock, holdBlock, and nextBlock
