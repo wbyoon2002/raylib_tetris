@@ -2,7 +2,7 @@
 #include "colors.h"
 #include "interface.h"
 
-Grid::Grid(float x, float y) : numRows(20), numCols(10), cellSize(30), offsetX(x), offsetY(y), rng(rd()) {
+Grid::Grid() : numRows(20), numCols(10), cellSize(30), rng(rd()) {
     Initialize();
     colors = GetCellColors();
 }
@@ -174,7 +174,7 @@ void Grid::Initialize() {
     */
 }
 
-void Grid::Draw() {
+void Grid::Draw(float offsetX, float offsetY) {
     for (int row = 0; row < numRows; row++) {
         for (int column = 0; column < numCols; column++) {
             int cellValue = grid[row][column];

@@ -131,7 +131,7 @@ protected:
     int lockDelayResetCount;
     // 9. Multiplayer
     // variables for drawing the playfield
-    float offsetX, offsetY;
+    float offsetX, defaultOffsetY, offsetY;
     // variables for keyboard layout
     int keyBoardLayout;
     const int leftKey[3] = {KEY_LEFT, KEY_A, KEY_LEFT};
@@ -150,6 +150,9 @@ protected:
     // variables related to pausing/resuming the game
     double pauseInterval;
     double lastPauseTime;
+    // variable for block dropping effect
+    double lastHardDropTime;
+    double effectAmplitude;
 };
 
 #endif

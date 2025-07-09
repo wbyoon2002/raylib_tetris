@@ -1,18 +1,20 @@
 #include "game.h"
 #include <ctime>
 #include <random>
+#include <cmath>
 
 int Game::keyPressed = 0;
 
 Game::Game(float x, float y, int keyboard)
     : gameOver(false), isHoldEmpty(true), hasSwappedBlock(false), fontSize(38), totalRowsCleared(0), lockDelayResetCount(0), tSpinType(0), lockBlockTrigger(false),
-        combo(-1), actionType(-1), hasTouchedGround(false), isCombo(false), isBacktoBack(false), dropPeriod(1.0), rowsCleared(0), keyBoardLayout(keyboard),
+        combo(-1), actionType(-1), hasTouchedGround(false), isCombo(false), isBacktoBack(false), dropPeriod(1.0), rowsCleared(0), keyBoardLayout(keyboard), defaultOffsetY(y),
         previousDifficult(false), currentDifficult(false), isLastManeuverRotation(false), isDifficultWallKick(false), actionTrigger(false), offsetX(x), offsetY(y),
         rng(rd()) {
     std::string assetsBasePath = ASSETS_PATH;
     lastDropTime = GetTime();
     lastActionTime = GetTime();
-    grid = new Grid(offsetX, offsetY);
+    lastHardDropTime = GetTime() - 1.0;
+    grid = new Grid();
     blocks = GetAllBlocks();
     currentBlock = GetRandomBlock();
     for (int i = 0; i < 3; i++) {
@@ -59,6 +61,13 @@ std::vector<Block> Game::GetAllBlocks() {
 
 void Game::Draw() {
     ClearBackground(darkBlue);
+
+    if (GetTime() - lastHardDropTime < 0.5) {
+        offsetY = defaultOffsetY + effectAmplitude * (1.0 - std::sin((GetTime() - lastHardDropTime) * PI));
+    }
+    else {
+        offsetY = defaultOffsetY;
+    }
     
     if (ActionTriggered()) {
         Color color = isDifficultAction[actionType] ? YELLOW : WHITE;
@@ -83,7 +92,7 @@ void Game::Draw() {
     DrawTextBox("Next", offsetX + 500, offsetY + 10, 170, 280);
     DrawTextBox("Hold", offsetX + 10, offsetY + 10, 170, 110);
     // Draw the grid
-    grid->Draw();
+    grid->Draw(offsetX, offsetY);
     // draw holdBlock, currentBlock, ghostBlock, and nextBlock
     if (!isHoldEmpty) {
         switch (holdBlock.id)
@@ -320,6 +329,7 @@ void Game::LockBlock() {
     }
     // an action is made if row(s) have been cleared or a T-Spin is made
     if (rowsCleared > 0 || tSpinType != 0) {
+        effectAmplitude = 10.0;
         // initialize actionTrigger, isCombo, and isBacktoBack
         actionTrigger = true;
         isCombo = false;
@@ -421,6 +431,8 @@ void Game::HardDropBlock() {
     isLastManeuverRotation = false;
     currentBlock = ghostBlock;
     distance = 0;
+    lastHardDropTime = GetTime();
+    effectAmplitude = 5.0;
     LockBlock();
 }
 

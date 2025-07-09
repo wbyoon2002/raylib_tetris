@@ -6,10 +6,10 @@
 
 class Grid {
 public:
-    Grid(float = 0, float = 0);
+    Grid();
     // sets the values of each element in the grid array
     void Initialize();
-    void Draw();
+    void Draw(float, float);
     bool IsCellOutside(int row, int column);
     bool IsCellEmpty(int row, int column);
     int ClearFullRows();
@@ -24,7 +24,6 @@ public:
     int numCols;
     int cellSize;
     std::vector<Color> colors;
-    float offsetX, offsetY;
     // Random number generation members
     std::random_device rd;
     std::mt19937 rng;
